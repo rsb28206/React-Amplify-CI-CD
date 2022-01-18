@@ -4,6 +4,7 @@ import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import { Task } from "./models/Task";
 import { nanoid } from "nanoid";
+import axios from 'axios';
 
 function usePrevious(value: undefined) {
   const ref = useRef();
@@ -57,13 +58,27 @@ function App(props: any) {
   const headingText = `${taskList.length} ${tasksNoun} remaining`;
   const listHeadingRef = useRef<HTMLInputElement>(null);
   const prevTaskLength = usePrevious(tasks.length) || 0;
-
+  
   useEffect(() => {
     if (listHeadingRef.current) {
       if (tasks.length - prevTaskLength === -1) {
         listHeadingRef.current.focus();
       }
     }
+    (
+			async () => {
+        const config = {
+          headers: {
+            'x-api-key': "P2ypB4Nx289hra7w5CgpV5d5garxe55Y8lY33beE",
+          }
+        }
+				await axios.get('organization', config)
+					.then((response) => {
+						// setMovies(response.data.movies);
+            console.log(response);
+					})
+			}
+		)()
   }, [tasks.length, prevTaskLength]);
 
   function addTask(name: string) {
